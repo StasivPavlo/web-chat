@@ -1,10 +1,16 @@
-import React from 'react';
-import { useFormik } from 'formik';
-import api from '../api/axios.ts';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { useFormik } from 'formik';
+
+import { useAppSelector } from '../hooks/hooks.ts';
+
+import api from '../api/axios.ts';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
+
+  const accessToken = localStorage.getItem('accessToken');
+  const { user } = useAppSelector((state) => state.user);
 
   const formik = useFormik({
     initialValues: {
@@ -18,12 +24,18 @@ const Register: React.FC = () => {
         await api.post("/auth/register", values);
 
         console.log("successfully registered!");
-        navigate('/login');
+        navigate('/activate');
       } catch (error) {
         console.log(error);
       }
     }
-  })
+  });
+
+  useEffect(() => {
+    if (user || accessToken) {
+      navigate('/');
+    }
+  }, [user, accessToken]);
 
   return (
     <div>
@@ -66,7 +78,7 @@ const Register: React.FC = () => {
         </form>
       </div>
     </div>
-  )
+  );
 };
 
 export default Register;

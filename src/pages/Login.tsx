@@ -1,13 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { useNavigate } from 'react-router';
+import { AxiosResponse } from 'axios';
 import { useFormik } from 'formik';
-import { useAppDispatch } from "../hooks/hooks.ts";
+
+import {useAppDispatch, useAppSelector} from '../hooks/hooks.ts';
 import * as userActions from './../features/user/userSlice.ts';
 import api from "../api/axios.ts";
-import { useNavigate } from "react-router";
-import { AxiosResponse } from "axios";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+
+  const accessToken = localStorage.getItem('accessToken');
+  const { user } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
 
   const formik = useFormik({
@@ -21,12 +25,19 @@ const Login: React.FC = () => {
         password: values.password
       }).then((data: AxiosResponse) => {
         dispatch(userActions.add(data.data.user));
-        navigate('/')
+        localStorage.setItem('accessToken', data.data.accessToken);
+        navigate('/');
       }).catch(e => {
-        console.error(e.response.data);
+        console.error(e.response);
       });
     }
   });
+
+  useEffect(() => {
+    if (user || accessToken) {
+      navigate('/');
+    }
+  }, [user, accessToken]);
 
   return (
     <div>

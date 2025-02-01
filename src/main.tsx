@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
@@ -7,11 +6,9 @@ import { store } from './app/store.ts';
 import AppRouter from './AppRouter.tsx';
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Provider store={store}>
-      <AppRouter>
-        <App/>
-      </AppRouter>
-    </Provider>
-  </StrictMode>,
+  <Provider store={store}>
+    <AppRouter>
+      <App/>
+    </AppRouter>
+  </Provider>,
 )

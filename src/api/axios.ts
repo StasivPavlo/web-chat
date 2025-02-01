@@ -1,4 +1,8 @@
-import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
+
+interface RefreshResponse {
+  accessToken: string;
+}
 
 interface DecodedToken {
   exp: number;
@@ -9,6 +13,7 @@ const api: AxiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 let isRefreshing = false;
@@ -34,7 +39,9 @@ function parseJwt(token: string): DecodedToken | null {
         .join('')
     );
     return JSON.parse(jsonPayload) as DecodedToken;
-  } catch {
+  } catch (error) {
+    console.error(error);
+
     return null;
   }
 }
@@ -42,27 +49,25 @@ function parseJwt(token: string): DecodedToken | null {
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
 
     if (accessToken) {
       const decodedToken = parseJwt(accessToken);
       if (decodedToken) {
         const tokenExpiry = decodedToken.exp * 1000;
         const now = Date.now();
-        const bufferTime = 60000; // 1 хвилина
+        const bufferTime = 60000;
 
-        if (tokenExpiry - now < bufferTime && refreshToken && !isRefreshing) {
+        if (tokenExpiry - now < bufferTime && !isRefreshing) {
           isRefreshing = true;
 
           try {
-            const response = await api.post('/auth/refresh', { refreshToken })
-            const { newAccessToken } = response.data;
+            const response = await axios.post<RefreshResponse>('http://localhost:3000/auth/refresh', {}, { withCredentials: true });
+            const { accessToken } = response.data;
 
-            localStorage.setItem('accessToken', newAccessToken);
-            config.headers = config.headers || {};
-            config.headers.Authorization = `Bearer ${newAccessToken}`;
+            localStorage.setItem('accessToken', accessToken);
+            config.headers.Authorization = `Bearer ${accessToken}`;
             isRefreshing = false;
-            onRefreshed(newAccessToken);
+            onRefreshed(accessToken);
           } catch (error) {
             isRefreshing = false;
             return Promise.reject(error);
@@ -70,7 +75,6 @@ api.interceptors.request.use(
         }
       }
 
-      config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
@@ -90,29 +94,30 @@ api.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true;
 
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (refreshToken) {
-          try {
-            const response = await api.post('/auth/refresh', { refreshToken });
-            const { newAccessToken } = response.data;
+        try {
+          const response = await axios.post<RefreshResponse>('http://localhost:3000/auth/refresh', {}, { withCredentials: true });
+          const { accessToken } = response.data;
 
-            localStorage.setItem('accessToken', newAccessToken);
-            isRefreshing = false;
-            onRefreshed(newAccessToken);
+          localStorage.setItem('accessToken', accessToken);
+          isRefreshing = false;
+          onRefreshed(accessToken);
 
-            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-            return api(originalRequest);
-          } catch (refreshError) {
-            isRefreshing = false;
-            return Promise.reject(refreshError);
-          }
+          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+          return api(originalRequest);
+        } catch (refreshError) {
+          isRefreshing = false;
+          return Promise.reject(refreshError);
         }
       }
 
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         addRefreshSubscriber(token => {
-          originalRequest.headers.Authorization = `Bearer ${token}`;
-          resolve(api(originalRequest));
+          if (!token) {
+            reject(error);
+          } else {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            resolve(api(originalRequest));
+          }
         });
       });
     }
