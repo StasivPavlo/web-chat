@@ -5,6 +5,8 @@ import { useAppDispatch, useAppSelector } from "./hooks/hooks.ts";
 import * as userActions from "./features/user/userSlice.ts";
 import api from "./api/axios.ts";
 
+import Loading from "./comoponents/Loading.tsx";
+
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -16,8 +18,6 @@ function App() {
     await api.post("/auth/logout");
     localStorage.removeItem('accessToken');
     dispatch(userActions.remove());
-
-    navigate("/login");
   }
 
   useEffect(() => {
@@ -25,14 +25,18 @@ function App() {
       dispatch(userActions.add(res.data))
     }).catch((e) => {
       console.log(e.response);
-      navigate("/login");
+      navigate("/auth?type=login");
     }).finally(() => {
       setIsLoading(false);
     });
   }, []);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="h-screen">
+        <Loading />
+      </div>
+    );
   }
 
   return user ? (
@@ -44,7 +48,7 @@ function App() {
       <Outlet />
     </div>
   ) : (
-    <Navigate to="/login" />
+    <Navigate to="/auth?type=login" />
   )
 }
 
