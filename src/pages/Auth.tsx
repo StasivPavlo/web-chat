@@ -13,8 +13,8 @@ import Modal, { ModalContent, ModalHeader, ModalTitle } from "../comoponents/Mod
 import Input from "../comoponents/Input.tsx";
 import InputWrapper from "../comoponents/InputWrapper.tsx";
 import Button from "../comoponents/Button.tsx";
-import {RegisterFormSchema, RegisterFormSchemaType} from "../validations/registerForm.ts";
-import {LoginFormSchema, LoginFormSchemaType} from "../validations/loginForm.ts";
+import { RegisterFormSchema, RegisterFormSchemaType } from "../validations/registerForm.ts";
+import { LoginFormSchema, LoginFormSchemaType } from "../validations/loginForm.ts";
 
 const LoginForm = () => {
   const [error, setError] = useState('');
@@ -27,10 +27,10 @@ const LoginForm = () => {
       email: '',
       password: ''
     },
-    onSubmit: (values) => {
+    onSubmit: ({ email, password }) => {
       api.post('auth/login', {
-        email: values.email,
-        password: values.password
+        email: email,
+        password: password
       }).then((data: AxiosResponse) => {
         dispatch(userActions.add(data.data.user));
 
@@ -43,7 +43,7 @@ const LoginForm = () => {
         console.error(e.response);
       });
     },
-    validationSchema: LoginFormSchema,
+    validationSchema: toFormikValidationSchema(LoginFormSchema),
     validateOnChange: false,
   });
 
@@ -63,7 +63,7 @@ const LoginForm = () => {
           id="password"
           type="password"
           placeholder="Password"
-          { ...formik.getFieldProps("email") }
+          { ...formik.getFieldProps("password") }
         />
       </InputWrapper>
       <Button type="submit" className="w-full">Login</Button>
@@ -82,9 +82,14 @@ const RegisterForm = () => {
       password: "",
       repeatPassword: "",
     },
-    onSubmit: async (values) => {
+    onSubmit: async ({ name, phone, email, password }) => {
       try {
-        await api.post("/auth/register", values);
+        await api.post("/auth/register", {
+          name,
+          phone,
+          email,
+          password,
+        });
 
         navigate('/activate');
       } catch (error) {
@@ -148,8 +153,8 @@ const RegisterForm = () => {
 };
 
 const AuthPage = () => {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user } = useAppSelector((state) => state.user);
 
   const accessToken = localStorage.getItem('accessToken');
