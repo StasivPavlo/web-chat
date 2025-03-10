@@ -1,7 +1,7 @@
-import React, {useCallback, useState} from "react";
+import React, { useCallback, useState } from "react";
 
-import Button from "./Button.tsx";
-import CreateChatModal from "./CreateChatModal.tsx";
+import Button from "@components/Button.tsx";
+import CreateChatModal from "@components/CreateChatModal.tsx";
 
 const SideBar: React.FC = () => {
   const [isCreateChatModalOpen, setIsCreateChatModalOpen] = useState(false);

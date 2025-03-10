@@ -1,4 +1,4 @@
-import { User } from '../../types/user.ts';
+import { User } from '@custom-types/user';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface State {

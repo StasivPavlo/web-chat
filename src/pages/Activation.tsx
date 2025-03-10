@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from "react-router";
 import { validate } from 'uuid';
 
-import api from "../api/axios.ts";
-import { useAppSelector } from "../hooks/hooks.ts";
+import api from "@api/axios.ts";
+import { useAppSelector } from "@hooks/hooks";
 
-import Modal from "../comoponents/Modal.tsx";
-import Loading from "../comoponents/Loading.tsx";
+import Modal from "@components/Modal.tsx";
+import Loading from "@components/Loading.tsx";
 
 const Activation: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);

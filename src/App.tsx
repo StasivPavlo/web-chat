@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router";
 
-import { useAppDispatch, useAppSelector } from "./hooks/hooks.ts";
-import * as chatsActions from "./features/chats/chatsSlice.ts";
-import * as userActions from "./features/user/userSlice.ts";
-import api from "./api/axios.ts";
+import { useAppDispatch, useAppSelector } from "@hooks/hooks.ts";
+import * as chatsActions from '@features/chats/chatsSlice.ts';
+import * as userActions from "@features/user/userSlice.ts";
+import api from "@api/axios.ts";
 
-import Loading from "./comoponents/Loading.tsx";
-import SideBar from "./comoponents/SideBar.tsx";
-import { socket } from "./api/socket.ts";
+import Loading from "@components/Loading.tsx";
+import SideBar from "@components/SideBar.tsx";
+import { socket } from "@api/socket.ts";
 
 function App() {
   const [isCheckAuthLoading, setIsCheckAuthLoading] = useState(true);

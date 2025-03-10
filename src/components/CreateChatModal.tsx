@@ -2,15 +2,15 @@ import React from "react";
 import { createPortal } from "react-dom";
 import { useFormik } from "formik";
 
-import api from "../api/axios.ts";
-import { socket } from "../api/socket.ts";
-import { useAppDispatch } from "../hooks/hooks.ts";
-import * as chatsAction from "../features/chats/chatsSlice.ts";
+import api from "@api/axios.ts";
+import { socket } from "@api/socket.ts";
+import { useAppDispatch } from "@hooks/hooks.ts";
+import * as chatsAction from "@features/chats/chatsSlice.ts";
 
-import Modal, { ModalContent, ModalTitle } from "./Modal.tsx";
-import InputWrapper from "./InputWrapper.tsx";
-import Input from "./Input.tsx";
-import Button from "./Button.tsx";
+import Modal, { ModalContent, ModalTitle } from "@components/Modal.tsx";
+import InputWrapper from "@components/InputWrapper.tsx";
+import Input from "@components/Input.tsx";
+import Button from "@components/Button.tsx";
 
 interface  Props {
   isOpen: boolean;

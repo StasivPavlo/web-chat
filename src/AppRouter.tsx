@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from "react-router";
 
-import SelectChat from './pages/SelectChat.tsx';
-import Chat from './pages/Chat.tsx';
-import Activation from "./pages/Activation.tsx";
-import Auth from "./pages/Auth.tsx";
+import SelectChat from '@pages/SelectChat.tsx';
+import Chat from '@pages/Chat.tsx';
+import Activation from "@pages/Activation.tsx";
+import Auth from "@pages/Auth.tsx";
 
 interface Props {
   children: React.ReactNode,

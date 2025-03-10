@@ -5,16 +5,16 @@ import { useFormik } from "formik";
 import { AxiosResponse } from "axios";
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
-import api from "../api/axios.ts";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks.ts";
-import * as userActions from "../features/user/userSlice.ts";
+import api from "@api/axios.ts";
+import { useAppDispatch, useAppSelector } from "@hooks/hooks";
+import * as userActions from "@features/user/userSlice.ts";
 
-import Modal, { ModalContent, ModalHeader, ModalTitle } from "../comoponents/Modal.tsx";
-import Input from "../comoponents/Input.tsx";
-import InputWrapper from "../comoponents/InputWrapper.tsx";
-import Button from "../comoponents/Button.tsx";
-import { RegisterFormSchema, RegisterFormSchemaType } from "../validations/registerForm.ts";
-import { LoginFormSchema, LoginFormSchemaType } from "../validations/loginForm.ts";
+import Modal, { ModalContent, ModalHeader, ModalTitle } from "@components/Modal.tsx";
+import Input from "@components/Input.tsx";
+import InputWrapper from "@components/InputWrapper.tsx";
+import Button from "@components/Button.tsx";
+import { RegisterFormSchema, RegisterFormSchemaType } from "@validations/registerForm.ts";
+import { LoginFormSchema, LoginFormSchemaType } from "@validations/loginForm.ts";
 
 const LoginForm = () => {
   const [error, setError] = useState('');

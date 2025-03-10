@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-import { useAppDispatch, useAppSelector } from "../hooks/hooks.ts";
-import * as chatsAction from "../features/chats/chatsSlice.ts";
+import { useAppDispatch, useAppSelector } from "@hooks/hooks";
+import * as chatsAction from "@features/chats/chatsSlice.ts";
 
-import { socket } from "../api/socket.ts";
+import { socket } from "@api/socket";
 
-import Input from "./../comoponents/Input.tsx";
-import Button from "./../comoponents/Button.tsx";
+import Input from "@components/Input.tsx";
+import Button from "@components/Button.tsx";
 
 const Chat = () => {
   const navigate = useNavigate();
