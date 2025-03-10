@@ -3,10 +3,12 @@ import { Chat } from "@custom-types/chat";
 
 interface State {
   chats: Chat[];
+  currentChat: number | null;
 }
 
 const initialState: State = {
   chats: [],
+  currentChat: null,
 }
 
 const chatsSlice = createSlice({
@@ -31,9 +33,12 @@ const chatsSlice = createSlice({
 
         return chat;
       });
-    }
+    },
+    setCurrentChat: (state, action: PayloadAction<number | null>) => {
+      state.currentChat = action.payload;
+    },
   },
 });
 
-export const { add, remove, addMessage } = chatsSlice.actions;
+export const { add, remove, addMessage, setCurrentChat } = chatsSlice.actions;
 export default chatsSlice.reducer;

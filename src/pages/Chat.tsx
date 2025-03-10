@@ -24,6 +24,7 @@ const Chat = () => {
 
     return null;
   });
+
   const user = useAppSelector((state) => state.user.user);
 
   const messages = chat ? chat.messages : [];
@@ -33,7 +34,10 @@ const Chat = () => {
   }, [messages]);
 
   useEffect(() => {
-    if (!chat) {
+    if (chat) {
+      dispatch(chatsAction.setCurrentChat(chat.id));
+    } else {
+      dispatch(chatsAction.setCurrentChat(null));
       navigate('/')
     }
   }, [chat]);
