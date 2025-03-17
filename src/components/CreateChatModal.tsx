@@ -10,7 +10,7 @@ import * as chatsAction from "@features/chats/chatsSlice.ts";
 import Modal, { ModalContent, ModalTitle } from "@components/Modal.tsx";
 import InputWrapper from "@components/InputWrapper.tsx";
 import Input from "@components/Input.tsx";
-import Button from "@components/Button.tsx";
+import {Button} from "@components/ui/button";
 
 interface  Props {
   isOpen: boolean;

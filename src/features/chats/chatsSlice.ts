@@ -34,11 +34,29 @@ const chatsSlice = createSlice({
         return chat;
       });
     },
+    removeMessage: (state, action: PayloadAction<{ chatId: number, message: string }>) => {
+      state.chats = state.chats.map((chat: Chat) => {
+        if (chat.id === action.payload.chatId) {
+          return { ...chat, messages: chat.messages.filter(msg => msg.message !== action.payload.message) };
+        }
+
+        return chat;
+      });
+    },
+    removeMessages: (state, action: PayloadAction<{ chatId: number }>) => {
+      state.chats = state.chats.map((chat: Chat) => {
+        if (chat.id === action.payload.chatId) {
+          return { ...chat, messages: [] };
+        }
+
+        return chat;
+      });;
+    },
     setCurrentChat: (state, action: PayloadAction<number | null>) => {
       state.currentChat = action.payload;
     },
   },
 });
 
-export const { add, remove, addMessage, setCurrentChat } = chatsSlice.actions;
+export const { add, remove, addMessage, setCurrentChat, removeMessages, removeMessage } = chatsSlice.actions;
 export default chatsSlice.reducer;

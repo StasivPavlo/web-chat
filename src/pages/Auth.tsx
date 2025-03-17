@@ -12,7 +12,7 @@ import * as userActions from "@features/user/userSlice.ts";
 import Modal, { ModalContent, ModalHeader, ModalTitle } from "@components/Modal.tsx";
 import Input from "@components/Input.tsx";
 import InputWrapper from "@components/InputWrapper.tsx";
-import Button from "@components/Button.tsx";
+import { Button } from "@components/ui/button";
 import { RegisterFormSchema, RegisterFormSchemaType } from "@validations/registerForm.ts";
 import { LoginFormSchema, LoginFormSchemaType } from "@validations/loginForm.ts";
 
