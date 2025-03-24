@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from 'react-router';
 import { validate } from 'uuid';
 
-import api from "@api/axios.ts";
-import { useAppSelector } from "@hooks/hooks";
+import api from '@api/axios.ts';
+import { useAppSelector } from '@hooks/hooks';
 
-import Modal from "@components/Modal.tsx";
-import Loading from "@components/Loading.tsx";
+import Modal from '@components/Modal.tsx';
+import Loading from '@components/Loading.tsx';
 
 const Activation: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -24,6 +24,7 @@ const Activation: React.FC = () => {
     if (token) {
       if (validate(token)) {
         setIsLoading(true);
+
         api.get('/auth/activate/' + token)
           .catch(e => {
             setError(e.message);
@@ -49,7 +50,7 @@ const Activation: React.FC = () => {
           <p className="text-gray-400">We've sent an activation link to your email.</p>
         </div>
       </Modal>
-    )
+    );
   }
 
   return (
@@ -61,8 +62,9 @@ const Activation: React.FC = () => {
         <div className="text-center text-white">
           <h2 className="text-xl font-bold">Activation Successful</h2>
           <p className="text-gray-400">Your account has been activated. You can now log in.</p>
-          <button onClick={() => navigate("/login")}
-                  className="mt-4 rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700 transition">
+          <button
+            onClick={() => navigate('/login')}
+            className="mt-4 rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700 transition">
             Go to Login
           </button>
         </div>

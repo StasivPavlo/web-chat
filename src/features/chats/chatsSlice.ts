@@ -9,7 +9,7 @@ interface State {
 const initialState: State = {
   chats: [],
   currentChat: null,
-}
+};
 
 const chatsSlice = createSlice({
   name: "chats",
@@ -28,11 +28,39 @@ const chatsSlice = createSlice({
     addMessage: (state, action: PayloadAction<{ userId: number, chatId: number, message: string, time?: string }>) => {
       state.chats = state.chats.map((chat: Chat) => {
         if (chat.id === action.payload.chatId) {
-          return { ...chat, messages: [...chat.messages, { userId: action.payload.userId, message: action.payload.message, time: action.payload.time || new Date().toISOString() }] };
+          return {
+            ...chat,
+            messages: [
+              ...chat.messages,
+              {
+                userId: action.payload.userId,
+                message: action.payload.message,
+                time: action.payload.time || new Date().toISOString(),
+              },
+            ],
+          };
         }
 
         return chat;
       });
+    },
+    removeMessage: (state, action: PayloadAction<{ chatId: number, message: string }>) => {
+      state.chats = state.chats.map((chat: Chat) => {
+        if (chat.id === action.payload.chatId) {
+          return { ...chat, messages: chat.messages.filter(msg => msg.message !== action.payload.message) };
+        }
+
+        return chat;
+      });
+    },
+    removeMessages: (state, action: PayloadAction<{ chatId: number }>) => {
+      state.chats = state.chats.map((chat: Chat) => {
+        if (chat.id === action.payload.chatId) {
+          return { ...chat, messages: [] };
+        }
+
+        return chat;
+      });;
     },
     setCurrentChat: (state, action: PayloadAction<number | null>) => {
       state.currentChat = action.payload;
@@ -40,5 +68,5 @@ const chatsSlice = createSlice({
   },
 });
 
-export const { add, remove, addMessage, setCurrentChat } = chatsSlice.actions;
+export const { add, remove, addMessage, setCurrentChat, removeMessages, removeMessage } = chatsSlice.actions;
 export default chatsSlice.reducer;

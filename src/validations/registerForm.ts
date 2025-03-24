@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const phoneRegex = new RegExp(
-  /^\+?[1-9]\d{1,14}$/
+  /^\+?[1-9]\d{1,14}$/,
 );
 
 export const RegisterFormSchema = z
