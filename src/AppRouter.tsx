@@ -25,4 +25,4 @@ const AppRouter: React.FC<Props> = ({ children }) => {
   );
 };
 
-export default AppRouter
+export default AppRouter;

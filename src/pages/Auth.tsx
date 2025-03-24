@@ -25,12 +25,12 @@ const LoginForm = () => {
   const formik = useFormik<LoginFormSchemaType>({
     initialValues: {
       email: '',
-      password: ''
+      password: '',
     },
     onSubmit: ({ email, password }) => {
       api.post('auth/login', {
         email: email,
-        password: password
+        password: password,
       }).then((data: AxiosResponse) => {
         dispatch(userActions.add(data.data.user));
 
@@ -40,6 +40,7 @@ const LoginForm = () => {
       }).catch(e => {
         setError('Incorrect email address or password');
 
+        // eslint-disable-next-line no-console
         console.error(e.response);
       });
     },
@@ -68,7 +69,7 @@ const LoginForm = () => {
       </InputWrapper>
       <Button type="submit" className="w-full">Login</Button>
     </form>
-  )
+  );
 };
 
 const RegisterForm = () => {
@@ -93,6 +94,7 @@ const RegisterForm = () => {
 
         navigate('/activate');
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log(error);
       }
     },
@@ -149,7 +151,7 @@ const RegisterForm = () => {
       </InputWrapper>
       <Button type="submit" className="w-full">Sign Up</Button>
     </form>
-  )
+  );
 };
 
 const AuthPage = () => {

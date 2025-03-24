@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuShortcut
+  DropdownMenuShortcut,
 } from "@components/ui/dropdown-menu";
 import { useNavigate, useParams } from "react-router";
 import * as chatsActions from '@features/chats/chatsSlice.ts';
@@ -17,10 +17,10 @@ const DropDown = () => {
   const dispatch = useAppDispatch();
 
   const { chatId } = useParams();
-  const chat = useAppSelector((state) => {
+  const currentChat = useAppSelector((state) => {
     if (chatId) {
       return state.chats.chats.find(chat => {
-        return chat.id === Number(chatId)
+        return chat.id === Number(chatId);
       }) || null;
     }
 
@@ -28,19 +28,19 @@ const DropDown = () => {
   });
 
   const deleteChatHandler = () => {
-    if (chat) {
-      socket.emit("deleteChat", { chatId: chat.id });
-      dispatch(chatsActions.remove(chat.id));
+    if (currentChat) {
+      socket.emit("deleteChat", { chatId: currentChat.id });
+      dispatch(chatsActions.remove(currentChat.id));
       navigate('/');
     }
-  }
+  };
 
   const deleteMessagesHandler = () => {
-    if (chat) {
-      socket.emit("deleteMessages", { chatId: chat.id });
-      dispatch(chatsActions.removeMessages({ chatId: chat.id }));
+    if (currentChat) {
+      socket.emit("deleteMessages", { chatId: currentChat.id });
+      dispatch(chatsActions.removeMessages({ chatId: currentChat.id }));
     }
-  }
+  };
 
   window.addEventListener('keydown', (e) => {
     if (e.shiftKey && e.key === 'D') {

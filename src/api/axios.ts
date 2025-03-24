@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, {AxiosInstance, InternalAxiosRequestConfig, AxiosResponse} from 'axios';
 
 interface RefreshResponse {
   accessToken: string;
@@ -36,10 +36,12 @@ function parseJwt(token: string): DecodedToken | null {
       atob(base64)
         .split('')
         .map(c => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
-        .join('')
+        .join(''),
     );
+
     return JSON.parse(jsonPayload) as DecodedToken;
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error);
 
     return null;
@@ -52,6 +54,7 @@ api.interceptors.request.use(
 
     if (accessToken) {
       const decodedToken = parseJwt(accessToken);
+
       if (decodedToken) {
         const tokenExpiry = decodedToken.exp * 1000;
         const now = Date.now();
@@ -61,7 +64,9 @@ api.interceptors.request.use(
           isRefreshing = true;
 
           try {
-            const response = await axios.post<RefreshResponse>('http://localhost:3000/auth/refresh', {}, { withCredentials: true });
+            const response =
+              await axios.post<RefreshResponse>('http://localhost:3000/auth/refresh', {}, {withCredentials: true});
+            // eslint-disable-next-line no-shadow
             const { accessToken } = response.data;
 
             localStorage.setItem('accessToken', accessToken);
@@ -70,6 +75,7 @@ api.interceptors.request.use(
             onRefreshed(accessToken);
           } catch (error) {
             isRefreshing = false;
+
             return Promise.reject(error);
           }
         }
@@ -80,7 +86,7 @@ api.interceptors.request.use(
 
     return config;
   },
-  error => Promise.reject(error)
+  error => Promise.reject(error),
 );
 
 api.interceptors.response.use(
@@ -95,17 +101,20 @@ api.interceptors.response.use(
         isRefreshing = true;
 
         try {
-          const response = await axios.post<RefreshResponse>('http://localhost:3000/auth/refresh', {}, { withCredentials: true });
-          const { accessToken } = response.data;
+          const response =
+            await axios.post<RefreshResponse>('http://localhost:3000/auth/refresh', {}, {withCredentials: true});
+          const {accessToken} = response.data;
 
           localStorage.setItem('accessToken', accessToken);
           isRefreshing = false;
           onRefreshed(accessToken);
 
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+
           return api(originalRequest);
         } catch (refreshError) {
           isRefreshing = false;
+
           return Promise.reject(refreshError);
         }
       }
@@ -123,7 +132,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

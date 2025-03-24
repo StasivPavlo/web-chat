@@ -8,7 +8,10 @@ interface Props {
 }
 
 const Modal: React.FC<Props> = ({ children, isOpen, onClose, className }) => {
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className={`relative rounded-2xl border border-gray-700 bg-gray-900 p-6 shadow-lg ${className}`}>

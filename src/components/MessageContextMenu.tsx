@@ -4,7 +4,7 @@ import {
   ContextMenuItem,
   ContextMenuSeparator,
   ContextMenuTrigger,
-  ContextMenuShortcut
+  ContextMenuShortcut,
 } from "@components/ui/context-menu";
 import { ContextMenuPortal } from "@radix-ui/react-context-menu";
 

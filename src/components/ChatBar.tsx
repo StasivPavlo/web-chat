@@ -8,7 +8,6 @@ import { useParams } from "react-router";
 import * as chatsActions from '@features/chats/chatsSlice.ts';
 import { socket } from "@api/socket.ts";
 
-
 const ChatBar = () => {
   const [input, setInput] = useState('');
 
@@ -19,10 +18,10 @@ const ChatBar = () => {
 
   const { chatId } = useParams();
 
-  const chat = useAppSelector((state) => {
+  const currentChat = useAppSelector((state) => {
     if (chatId) {
       return state.chats.chats.find(chat => {
-        return chat.id === Number(chatId)
+        return chat.id === Number(chatId);
       }) || null;
     }
 
@@ -30,9 +29,9 @@ const ChatBar = () => {
   });
 
   const sendMessageHandler = () => {
-    if (user && chat && input) {
+    if (user && currentChat && input) {
       socket.emit('message', { chatId: chatId, message: input.trim() });
-      dispatch(chatsActions.addMessage({ userId: user.id, chatId: chat.id, message: input.trim() }));
+      dispatch(chatsActions.addMessage({ userId: user.id, chatId: currentChat.id, message: input.trim() }));
       setInput('');
 
       if (textareaRef.current) {
@@ -41,8 +40,8 @@ const ChatBar = () => {
     }
   };
 
-  const handleInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInput(event.target.value);
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.target.value);
 
     if (textareaRef.current) {
       textareaRef.current.style.height = "40px";
@@ -60,6 +59,7 @@ const ChatBar = () => {
           onChange={handleInput}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
+              // eslint-disable-next-line no-console
               console.log('Enter pressed');
 
               e.preventDefault();
