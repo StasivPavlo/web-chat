@@ -33,12 +33,6 @@ function App() {
     return null;
   });
 
-  const logoutHandler = async () => {
-    await api.post("/auth/logout");
-    localStorage.removeItem('accessToken');
-    dispatch(userActions.remove());
-  };
-
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
 
@@ -89,7 +83,7 @@ function App() {
   return user ? (
     <div>
       <SidebarProvider>
-        <AppSidebar user={user} logoutHandler={logoutHandler} />
+        <AppSidebar />
         <SidebarInset>
           <header className="
             flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear

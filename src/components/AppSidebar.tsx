@@ -1,17 +1,16 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
 import CreateChatModal from "@components/CreateChatModal.tsx";
-import { User } from "@custom-types/user";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "./ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@components/ui/sidebar";
 import { Button } from "@components/ui/button";
+import SearchForm from '@components/SearchForm';
+import ProfileDropdown from '@components/ProfileDropdown';
+import { useAppSelector } from '@hooks/hooks';
+import AppSidebarContent from "@components/AppSidebarContent";
 
-interface Props {
-  user: User;
-  logoutHandler: () => void;
-}
-
-const AppSidebar: React.FC<Props> = ({ user, logoutHandler }) => {
+const AppSidebar = () => {
   const [isCreateChatModalOpen, setIsCreateChatModalOpen] = useState(false);
+  const { chats } = useAppSelector(state => state.chats);
 
   const createChatHandler = () => {
     setIsCreateChatModalOpen(true);
@@ -22,12 +21,15 @@ const AppSidebar: React.FC<Props> = ({ user, logoutHandler }) => {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
+        <ProfileDropdown />
+        <SearchForm />
       </SidebarHeader>
       <SidebarContent>
-        <div>
-          <p>{user.name}</p>
-          <button onClick={logoutHandler}>Logout</button>
-        </div>
+        { chats ? (
+          <AppSidebarContent chats={chats} />
+        ) : (
+          <div>You don't have any chats</div>
+        )}
         <Button onClick={createChatHandler}>Create Chat</Button>
         <CreateChatModal
           isOpen={isCreateChatModalOpen}

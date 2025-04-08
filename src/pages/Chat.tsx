@@ -76,11 +76,11 @@ const Chat = () => {
                             title={new Date(msg.time).toLocaleString()}
                             className={`text-xs cursor-default ${msg.userId === user.id ? 'text-secondary' : 'text-primary'}`}
                           >
-                            {new Date(msg.time).toLocaleTimeString([], {
+                            { new Date(msg.time).toLocaleTimeString([], {
                               hour: '2-digit',
                               minute: '2-digit',
                               hour12: false,
-                            })}
+                            }) }
                           </span>
                         </div>
                       </div>
